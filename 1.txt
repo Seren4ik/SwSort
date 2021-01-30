@@ -1,0 +1,65 @@
+ string volume = swModel.GetCustomInfoValue(nameConf, "Объём");
+            string surface_area = swModel.GetCustomInfoValue(nameConf, "Площадь поверхности");
+
+            if (volume == "")
+            {
+                swModel.AddCustomInfo3(nameConf,"Объём",1, "\"SW-Volume@@По умолчанию@Деталь1.SLDPRT\"");
+            }
+
+            if (surface_area == "")
+            {
+                swModel.AddCustomInfo3(nameConf, "Площадь поверхности", 1, "\"SW-Площадь поверхности@@По умолчанию@Деталь1.SLDPRT\"");
+            }
+______________________________________________
+
+if (type1 == "Лист" || type1 == "Лист ОЦ")
+                {
+                    if (tolsh1 == "1" || tolsh1 == "2" || tolsh1 == "3" || tolsh1 == "4" || tolsh1 == "5" || tolsh1 == "6" || tolsh1 == "8" || tolsh1 == "10" || tolsh1 == "12")
+                    {
+                        tolsh1 = tolsh1 + ",0";
+                    }
+
+                    string typesort = type1 + " Б-ПН-" + tolsh1;
+
+                    OpenExcelFile(path1, typesort, nameConf, swModel);
+                }
+            else if (type1.Contains("Лист ПВЛ"))
+            {
+                if (tolsh1 == "1" || tolsh1 == "2" || tolsh1 == "3" || tolsh1 == "4" || tolsh1 == "5" || tolsh1 == "6" || tolsh1 == "8" || tolsh1 == "10" || tolsh1 == "12")
+                {
+                    tolsh1 = tolsh1 + ",0";
+                }
+
+                string typesort = type1 + " TR16-ОЦ-" + tolsh1;
+
+                OpenExcelFile(path1, typesort, nameConf, swModel);
+            }    
+________________________________________________
+
+                if (prop1.Length == 4)
+                {
+                    SW.DeleteCustomInfo("Сорт");
+                    SW.AddCustomInfo("Сорт", "Текст", prop1[1] + " " + prop1[2] + " " + prop1[3]);
+                    SW.AddCustomInfo2("Сорт", 1, prop1[1] + " " + prop1[2] + " " + prop1[3]);
+                }
+                else if (prop1.Length == 5)
+                {
+                    SW.DeleteCustomInfo("Сорт");
+                    SW.AddCustomInfo("Сорт", "Текст",prop1[2] + " " + prop1[3]+ " " + prop1[4]);
+                    SW.AddCustomInfo2("Сорт", 1,prop1[2] + " " + prop1[3] + " " + prop1[4]);
+                }
+                else
+                {
+                    SW.DeleteCustomInfo("Сорт");
+                    SW.AddCustomInfo("Сорт", "Текст", prop1[1]);
+                    SW.AddCustomInfo2("Сорт", 1, prop1[1]);
+
+                }
+                
+                SW.DeleteCustomInfo("Материал");
+                SW.AddCustomInfo("Материал", "Текст", listProp[1]);
+                SW.AddCustomInfo2("Материал", 1, listProp[1]);
+                SW.EditRebuild3();
+                SW.Save();
+                App.SendMsgToUser2("Операция выполнена", 2, 0);
+                GC.Collect();
